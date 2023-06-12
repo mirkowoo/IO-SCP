@@ -1,45 +1,61 @@
-import random
-import math
 import time
-
+from numpy import sort
+import os
 def algorythm(universe,subSets,costs):
 
     #set used to save the selected subsets
     selected = []
-    #set that represent the elements that are not used yet
-
+    #sets that represent the elements that are not used yet
     notUsed = universe
     subSetsCopy = subSets
     costCopy = costs
+    
+    #value to store the total cost
+    totalCost = 0
+    
+    #veryfies if notUsed is empty or not, so the cycle can run until then
     while notUsed:
+        #variables definition
         bestSubset = None
         bestRatio = -0.1
+        bestPos = -1
         print("largo notUsed: ",len(notUsed))
         print(notUsed)
         for i in range(len(subSetsCopy)):
-            print(subSetsCopy[i])
+            #print(subSetsCopy[i])
             cost = costCopy[i]
             costRatio = cost / len(subSets)
+            
             if costRatio > bestRatio:
-                bestSubset = subSetsCopy[i]
-                bestRatio = costRatio
-
-        selected.append(bestSubset)
+                for x in subSetsCopy[i]:
+                    if x in notUsed:
+                        bestSubset = subSetsCopy[i]
+                        bestRatio = costRatio
+                        bestPos = i
+                    else:
+                        break
+        #save the best subset of the iteration
+        selected.append(bestSubset[0])
+        #add the cost of the subset to the total
+        totalCost += costs[bestPos]
         print("best subset: ",bestSubset)
+        print("cost of the subset: $",costs[bestPos])
+        print("total cost rn: $",totalCost)
         print()
         time.sleep(1)
+        #removing the values from te arrays to disregard them in the next iterations
         for i in range(len(bestSubset)):
             for x in notUsed:
                 if(x == bestSubset[i]):
-                    notUsed.remove(bestSubset[x])
+                    notUsed.remove(bestSubset[i])
+                    break
 
             for x in range(len(subSetsCopy)):
-                for y in range(len(subSetsCopy[x])):
-                    if(subSetsCopy[x][y] == bestSubset[x]):
-                        subSetsCopy.pop(bestSubset[y])
-                        costCopy.pop(bestSubset[y])
-
-    return selected 
+                if(subSetsCopy[x][0] == bestSubset[0]):
+                    subSetsCopy.pop(x)
+                    costCopy.pop(x)
+                    break
+    return selected
 
 #universe: 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,33,34,35,36,37,38
 #subsets: [4,5],[5,27,29],[2,25,26,28],[2,3,28,29],[7,9,15,24,27],[6,8,9,10,15],[7,10],[6,7],[7,8,15,33],[12,16,17,24,25],[11,13,15],[12,15,17,33,35],[16,17,30,31,37],[6,7,10,12,13],[11,14,17,30],[11,13,14,16,33,35],[20,34],[21,22,34],[18,21,34],[19,20,34],[19,23],[22],[6,11,15,25,26,27,28],[11,24,26],[4,24,25,28],[3,6,28,29],[4,5,24,26,27,29],[3,5,27,28],[14,16,31,34,36,37],[14,35,38],[10,13,15,17,35],[18,19,20,21,30,36],[17,31,33],[30,34,38],[14,30],[30,31,36]
@@ -82,8 +98,11 @@ costs = {frozenset({2,4,5}): 1,frozenset({3,5,27,29}):1.5,frozenset({4,2,25,26,2
  ,frozenset({18,21,34}):2,frozenset({19,20,34}):2,frozenset({19,23}):3,frozenset({22}):2,frozenset({6,11,15,25,26,27,28}):3,frozenset({11,24,26}):3,frozenset({4,24,25,28}):1,frozenset({3,6,28,29}):2.5,frozenset({4,5,24,26,27,29}):2,frozenset({3,5,27,28}):3.5,frozenset({14,16,31,34,36,37}):2
  ,frozenset({14,35,38}):1.5,frozenset({10,13,15,17,35}):2,frozenset({18,19,20,21,30,36}):3,frozenset({17,31,33}):3.5,frozenset({30,34,38}):2,frozenset({14,30}):2.5,frozenset({30,31,36}):1.5}
 '''
-print(algorythm(universe,subSets,costs))
+bestSets= (algorythm(universe,subSets,costs))
 
+#os.system('cls')
+
+print("Best places \n",bestSets)
 #comunas = cargarDatos()
 #print(len(universe))
 #print(len(comunas))
