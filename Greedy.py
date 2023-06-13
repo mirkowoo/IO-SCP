@@ -1,10 +1,9 @@
 import time
-from numpy import sort
 import os
 def algorythm(universe,subSets,costs):
 
     #set used to save the selected subsets
-    selected = []
+    selected = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]
     #sets that represent the elements that are not used yet
     notUsed = universe
     subSetsCopy = subSets
@@ -35,7 +34,8 @@ def algorythm(universe,subSets,costs):
                     else:
                         break
         #save the best subset of the iteration
-        selected.append(bestSubset[0])
+        selected[bestPos]=[1,bestSubset]
+        #selected.append(bestSubset[0])
         #add the cost of the subset to the total
         totalCost += costs[bestPos]
         print("best subset: ",bestSubset)
